@@ -10,6 +10,7 @@
     <ClCompile Include="..\..\cpp\bindings.cpp" />
     <ClCompile Include="..\..\cpp\ThreadPool.cpp" />
     <ClCompile Include="..\..\cpp\DBHostObject.cpp" />
+    <ClCompile Include="..\..\cpp\bridge.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -17,6 +18,7 @@
     <ClInclude Include="OPSQLite.h" />
     <ClInclude Include="..\..\cpp\ThreadPool.h" />
     <ClInclude Include="..\..\cpp\DBHostObject.h" />
+    <ClInclude Include="..\..\cpp\bridge.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PropertySheet.props" />
