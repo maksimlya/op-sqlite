@@ -347,7 +347,7 @@ void DBHostObject::create_jsi_functions() {
       auto reject = std::make_shared<jsi::Value>(rt, args[1]);
 
       auto task = [&rt, this, query, params = std::move(params), resolve,
-                   reject, invoker = this->jsCallInvoker]() {
+                   reject, invoker = jsCallInvoker]() {
         try {
           std::vector<std::vector<JSVariant>> results;
 
@@ -409,7 +409,7 @@ void DBHostObject::create_jsi_functions() {
       auto reject = std::make_shared<jsi::Value>(rt, args[1]);
 
       auto task = [&rt, this, query, params = std::move(params), resolve,
-                   reject, invoker = this->jsCallInvoker]() {
+                   reject, invoker = jsCallInvoker]() {
         try {
           std::vector<DumbHostObject> results;
           std::shared_ptr<std::vector<SmartHostObject>> metadata =

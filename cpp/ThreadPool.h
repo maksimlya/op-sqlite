@@ -11,11 +11,47 @@
 
 namespace opsqlite {
 
+class Delegate {
+public:
+    // Default constructor
+    Delegate() : callable(nullptr) {}
+
+    // Template constructor to accept various callable types
+    template <typename Callable>
+    Delegate(Callable&& func) : callable(std::make_unique<CallableModel<Callable>>(std::forward<Callable>(func))) {}
+
+    // Call operator to invoke the stored callable
+    void operator()() const {
+        if (callable) {
+            callable->call();
+        } else {
+            throw std::runtime_error("Attempted to call an empty delegate");
+        }
+    }
+
+private:
+    // Concept for type erasure
+    struct CallableConcept {
+        virtual ~CallableConcept() = default;
+        virtual void call() const = 0;
+    };
+
+    // Model to wrap callable types
+    template <typename Callable>
+    struct CallableModel : CallableConcept {
+        CallableModel(Callable&& func) : func(std::forward<Callable>(func)) {}
+        void call() const override { func(); }
+        Callable func;
+    };
+
+    std::unique_ptr<CallableConcept> callable;
+};
+
 class ThreadPool {
 public:
   ThreadPool();
   ~ThreadPool();
-  void queueWork(std::function<void(void)> task);
+  void queueWork(Delegate task);
   void waitFinished();
   void restartPool();
 
@@ -32,7 +68,7 @@ private:
   std::mutex workQueueMutex;
 
   // Queue of requests waiting to be processed
-  std::queue<std::function<void(void)>> workQueue;
+  std::queue<Delegate> workQueue;
 
   // This will be set to true when the thread pool is shutting down. This tells
   // the threads to stop looping and finish

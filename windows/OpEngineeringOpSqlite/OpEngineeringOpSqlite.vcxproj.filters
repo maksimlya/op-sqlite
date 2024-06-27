@@ -7,11 +7,16 @@
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
     <ClCompile Include="ReactPackageProvider.cpp" />
+    <ClCompile Include="..\..\cpp\bindings.cpp" />
+    <ClCompile Include="..\..\cpp\ThreadPool.cpp" />
+    <ClCompile Include="..\..\cpp\DBHostObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
     <ClInclude Include="ReactPackageProvider.h" />
     <ClInclude Include="OPSQLite.h" />
+    <ClInclude Include="..\..\cpp\ThreadPool.h" />
+    <ClInclude Include="..\..\cpp\DBHostObject.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PropertySheet.props" />

@@ -39,44 +39,45 @@ ThreadPool::~ThreadPool() {
 
 // This function will be called by the server every time there is a request
 // that needs to be processed by the thread pool
-void ThreadPool::queueWork(std::function<void(void)> task) {
-  // Grab the mutex
-  std::lock_guard<std::mutex> g(workQueueMutex);
+void ThreadPool::queueWork(Delegate task) {
+    // Grab the mutex
+    std::lock_guard<std::mutex> g(workQueueMutex);
 
-  // Push the request to the queue
-  workQueue.push(task);
+    // Push the request to the queue using move semantics
+    workQueue.push(std::move(task));
 
-  // Notify one thread that there are requests to process
-  workQueueConditionVariable.notify_one();
+    // Notify one thread that there are requests to process
+    workQueueConditionVariable.notify_one();
 }
 
 // Function used by the threads to grab work from the queue
 void ThreadPool::doWork() {
-  // Loop while the queue is not destructing
-  while (!done) {
-    std::function<void(void)> task;
+    // Loop while the queue is not destructing
+    while (!done) {
+        Delegate task;
 
-    // Create a scope, so we don't lock the queue for longer than necessary
-    {
-      std::unique_lock<std::mutex> g(workQueueMutex);
-      workQueueConditionVariable.wait(g, [&] {
-        // Only wake up if there are elements in the queue or the program is
-        // shutting down
-        return !workQueue.empty() || done;
-      });
+        // Create a scope, so we don't lock the queue for longer than necessary
+        {
+            std::unique_lock<std::mutex> g(workQueueMutex);
+            workQueueConditionVariable.wait(g, [&] {
+                // Only wake up if there are elements in the queue or the program is
+                // shutting down
+                return !workQueue.empty() || done;
+            });
 
-      // If we are shutting down exit witout trying to process more work
-      if (done) {
-        break;
-      }
+            // If we are shutting down exit without trying to process more work
+            if (done) {
+                break;
+            }
 
-      task = workQueue.front();
-      workQueue.pop();
+            // Move the task out of the queue
+            task = std::move(workQueue.front());
+            workQueue.pop();
+        }
+        ++busy;
+        task();
+        --busy;
     }
-    ++busy;
-    task();
-    --busy;
-  }
 }
 
 void ThreadPool::waitFinished() {
