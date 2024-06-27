@@ -13,38 +13,39 @@ namespace opsqlite {
 
 class Delegate {
 public:
-    // Default constructor
-    Delegate() : callable(nullptr) {}
+  // Default constructor
+  Delegate() : callable(nullptr) {}
 
-    // Template constructor to accept various callable types
-    template <typename Callable>
-    Delegate(Callable&& func) : callable(std::make_unique<CallableModel<Callable>>(std::forward<Callable>(func))) {}
+  // Template constructor to accept various callable types
+  template <typename Callable>
+  Delegate(Callable &&func)
+      : callable(std::make_unique<CallableModel<Callable>>(
+            std::forward<Callable>(func))) {}
 
-    // Call operator to invoke the stored callable
-    void operator()() const {
-        if (callable) {
-            callable->call();
-        } else {
-            throw std::runtime_error("Attempted to call an empty delegate");
-        }
+  // Call operator to invoke the stored callable
+  void operator()() const {
+    if (callable) {
+      callable->call();
+    } else {
+      throw std::runtime_error("Attempted to call an empty delegate");
     }
+  }
 
 private:
-    // Concept for type erasure
-    struct CallableConcept {
-        virtual ~CallableConcept() = default;
-        virtual void call() const = 0;
-    };
+  // Concept for type erasure
+  struct CallableConcept {
+    virtual ~CallableConcept() = default;
+    virtual void call() const = 0;
+  };
 
-    // Model to wrap callable types
-    template <typename Callable>
-    struct CallableModel : CallableConcept {
-        CallableModel(Callable&& func) : func(std::forward<Callable>(func)) {}
-        void call() const override { func(); }
-        Callable func;
-    };
+  // Model to wrap callable types
+  template <typename Callable> struct CallableModel : CallableConcept {
+    CallableModel(Callable &&func) : func(std::forward<Callable>(func)) {}
+    void call() const override { func(); }
+    Callable func;
+  };
 
-    std::unique_ptr<CallableConcept> callable;
+  std::unique_ptr<CallableConcept> callable;
 };
 
 class ThreadPool {
