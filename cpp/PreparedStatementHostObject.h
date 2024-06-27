@@ -7,8 +7,8 @@
 #else
 #include <sqlite3.h>
 #endif
-#include <string>
 #include <stdexcept>
+#include <string>
 
 namespace opsqlite {
 namespace jsi = facebook::jsi;
