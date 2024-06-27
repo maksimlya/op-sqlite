@@ -9,7 +9,7 @@ namespace winrt::op_sqlite_example::implementation
 
 void ReactPackageProvider::CreatePackage(IReactPackageBuilder const &packageBuilder) noexcept
 {
-    AddAttributedModules(packageBuilder, true);
+    AddAttributedModules(packageBuilder, false);
 }
 
 } // namespace winrt::op_sqlite_example::implementation

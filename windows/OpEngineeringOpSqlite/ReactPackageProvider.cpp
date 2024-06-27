@@ -4,7 +4,7 @@
 #include "ReactPackageProvider.g.cpp"
 #endif
 
-#include "ReactNativeModule.h"
+#include "OPSQLite.h"
 
 using namespace winrt::Microsoft::ReactNative;
 
@@ -13,7 +13,7 @@ namespace winrt::OpEngineeringOpSqlite::implementation
 
 void ReactPackageProvider::CreatePackage(IReactPackageBuilder const &packageBuilder) noexcept
 {
-    AddAttributedModules(packageBuilder, true);
+    AddAttributedModules(packageBuilder, false);
 }
 
 } // namespace winrt::OpEngineeringOpSqlite::implementation
