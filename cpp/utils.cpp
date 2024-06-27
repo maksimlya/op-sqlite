@@ -7,7 +7,12 @@
 #include <iostream>
 #include <sstream>
 #include <sys/stat.h>
-#include <unistd.h>
+#ifdef _WIN32
+    #include <windows.h> // Include Windows-specific headers
+    #include <filesystem>
+#else
+    #include <unistd.h>  // Include POSIX-specific headers
+#endif
 
 namespace opsqlite {
 
@@ -219,43 +224,41 @@ create_raw_result(jsi::Runtime &rt, BridgeResult status,
   return res;
 }
 
-void to_batch_arguments(jsi::Runtime &rt, jsi::Array const &batchParams,
+void to_batch_arguments(jsi::Runtime &rt, const jsi::Array &batchParams,
                         std::vector<BatchArguments> *commands) {
-  for (int i = 0; i < batchParams.length(rt); i++) {
-    const jsi::Array &command =
-        batchParams.getValueAtIndex(rt, i).asObject(rt).asArray(rt);
-    if (command.length(rt) == 0) {
-      continue;
-    }
+    for (size_t i = 0; i < batchParams.length(rt); ++i) {
+        const jsi::Array &command =
+            batchParams.getValueAtIndex(rt, i).asObject(rt).asArray(rt);
+        if (command.length(rt) == 0) {
+            continue;
+        }
 
-    const std::string query =
-        command.getValueAtIndex(rt, 0).asString(rt).utf8(rt);
-    const jsi::Value &commandParams = command.length(rt) > 1
-                                          ? command.getValueAtIndex(rt, 1)
-                                          : jsi::Value::undefined();
-    if (!commandParams.isUndefined() &&
-        commandParams.asObject(rt).isArray(rt) &&
-        commandParams.asObject(rt).asArray(rt).length(rt) > 0 &&
-        commandParams.asObject(rt)
-            .asArray(rt)
-            .getValueAtIndex(rt, 0)
-            .isObject()) {
-      // This arguments is an array of arrays, like a batch update of a single
-      // sql command.
-      const jsi::Array &batchUpdateParams =
-          commandParams.asObject(rt).asArray(rt);
-      for (int x = 0; x < batchUpdateParams.length(rt); x++) {
-        const jsi::Value &p = batchUpdateParams.getValueAtIndex(rt, x);
-        auto params =
-            std::make_shared<std::vector<JSVariant>>(to_variant_vec(rt, p));
-        commands->push_back({query, params});
-      }
-    } else {
-      auto params = std::make_shared<std::vector<JSVariant>>(
-          to_variant_vec(rt, commandParams));
-      commands->push_back({query, params});
+        std::string query =
+            command.getValueAtIndex(rt, 0).asString(rt).utf8(rt);
+        jsi::Value commandParams = command.length(rt) > 1
+                                       ? command.getValueAtIndex(rt, 1)
+                                       : jsi::Value::undefined();
+
+        if (!commandParams.isUndefined() &&
+            commandParams.isObject() &&
+            commandParams.asObject(rt).isArray(rt)) {
+            const jsi::Array &paramsArray = commandParams.asObject(rt).asArray(rt);
+            if (paramsArray.length(rt) > 0 &&
+                paramsArray.getValueAtIndex(rt, 0).isObject()) {
+                // This argument is an array of arrays, like a batch update of a single
+                // SQL command.
+                for (size_t x = 0; x < paramsArray.length(rt); ++x) {
+                    const jsi::Value &p = paramsArray.getValueAtIndex(rt, x);
+                    auto params = std::make_shared<std::vector<JSVariant>>(to_variant_vec(rt, p));
+                    commands->emplace_back(BatchArguments{std::move(query), std::move(params)});
+                }
+                continue;
+            }
+        }
+
+        auto params = std::make_shared<std::vector<JSVariant>>(to_variant_vec(rt, std::move(commandParams)));
+        commands->emplace_back(BatchArguments{std::move(query), std::move(params)});
     }
-  }
 }
 
 #ifndef OP_SQLITE_USE_LIBSQL

@@ -8,6 +8,7 @@
 #include <sqlite3.h>
 #endif
 #include <string>
+#include <stdexcept>
 
 namespace opsqlite {
 namespace jsi = facebook::jsi;
