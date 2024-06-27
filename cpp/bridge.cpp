@@ -220,7 +220,7 @@ BridgeResult opsqlite_execute_prepared_statement(
 
   sqlite3 *db = dbMap[dbName];
 
-  const char *errorMessage;
+  const char *errorMessage = nullptr;
 
   bool isConsuming = true;
   bool isFailed = false;
@@ -380,7 +380,7 @@ opsqlite_execute(std::string const &dbName, std::string const &query,
   sqlite3 *db = dbMap[dbName];
 
   sqlite3_stmt *statement;
-  const char *errorMessage;
+  const char *errorMessage = nullptr;
   const char *remainingStatement = nullptr;
 
   bool isConsuming = true;
@@ -550,7 +550,7 @@ opsqlite_execute_raw(std::string const &dbName, std::string const &query,
   sqlite3 *db = dbMap[dbName];
 
   sqlite3_stmt *statement;
-  const char *errorMessage;
+  const char *errorMessage = nullptr;
   const char *remainingStatement = nullptr;
 
   bool isConsuming = true;
@@ -851,7 +851,7 @@ BridgeResult opsqlite_load_extension(std::string const &db_name,
     return {SQLiteError, "[op-sqlite] could not enable extension loading"};
   }
   const char *path_cstr = path.c_str();
-  const char *entry_point_cstr;
+  const char *entry_point_cstr = nullptr;
   if (!entry_point.empty()) {
     entry_point_cstr = entry_point.c_str();
   }

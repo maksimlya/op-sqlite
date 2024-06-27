@@ -377,11 +377,12 @@ void DBHostObject::create_jsi_functions() {
           });
 
         } catch (std::exception &exc) {
-          invoker->invokeAsync([&rt, exc = std::move(exc), reject] {
-            auto errorCtr = rt.global().getPropertyAsFunction(rt, "Error");
-            auto error = errorCtr.callAsConstructor(
-                rt, jsi::String::createFromAscii(rt, exc.what()));
-            reject->asObject(rt).asFunction(rt).call(rt, error);
+          auto excPtr = std::make_shared<std::exception>(exc); // Capture the exception in a shared_ptr
+          invoker->invokeAsync([&rt, excPtr, reject] {
+              auto errorCtr = rt.global().getPropertyAsFunction(rt, "Error");
+              auto error = errorCtr.callAsConstructor(
+                  rt, jsi::String::createFromAscii(rt, excPtr->what()));
+              reject->asObject(rt).asFunction(rt).call(rt, error);
           });
         }
       };
@@ -445,11 +446,12 @@ void DBHostObject::create_jsi_functions() {
               });
 
         } catch (std::exception &exc) {
-          invoker->invokeAsync([&rt, exc = std::move(exc), reject] {
-            auto errorCtr = rt.global().getPropertyAsFunction(rt, "Error");
-            auto error = errorCtr.callAsConstructor(
-                rt, jsi::String::createFromAscii(rt, exc.what()));
-            reject->asObject(rt).asFunction(rt).call(rt, error);
+          auto excPtr = std::make_shared<std::exception>(exc); // Capture the exception in a shared_ptr
+          invoker->invokeAsync([&rt, excPtr, reject] {
+              auto errorCtr = rt.global().getPropertyAsFunction(rt, "Error");
+              auto error = errorCtr.callAsConstructor(
+                  rt, jsi::String::createFromAscii(rt, excPtr->what()));
+              reject->asObject(rt).asFunction(rt).call(rt, error);
           });
         }
       };
