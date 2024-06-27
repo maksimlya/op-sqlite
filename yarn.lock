@@ -2371,6 +2371,7 @@ __metadata:
   dependencies:
     clang-format: "npm:^1.8.0"
     lefthook: "npm:^1.5.5"
+    metro-config: "npm:^0.80.9"
     react: "npm:18.2.0"
     react-native: "npm:0.74.2"
     react-native-builder-bob: "npm:^0.23.2"
@@ -8757,7 +8758,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"metro-config@npm:0.80.9, metro-config@npm:^0.80.3":
+"metro-config@npm:0.80.9, metro-config@npm:^0.80.3, metro-config@npm:^0.80.9":
   version: 0.80.9
   resolution: "metro-config@npm:0.80.9"
   dependencies:
@@ -9657,6 +9658,7 @@ __metadata:
     react: "npm:18.2.0"
     react-native: "npm:0.74.2"
     react-native-restart: "npm:^0.0.27"
+    react-native-windows: "npm:0.74.9"
     react-test-renderer: "npm:18.2.0"
     reflect-metadata: "npm:^0.1.13"
     stream-browserify: "npm:^3.0.0"

@@ -51,13 +51,13 @@
   "devDependencies": {
     "clang-format": "^1.8.0",
     "lefthook": "^1.5.5",
+    "metro-config": "^0.80.9",
     "react": "18.2.0",
     "react-native": "0.74.2",
     "react-native-builder-bob": "^0.23.2",
     "react-native-windows": "0.74.9",
     "turbo": "^1.12.4",
-    "typescript": "5.0.4",
-    "metro-config": "^0.80.9"
+    "typescript": "5.0.4"
   },
   "peerDependencies": {
     "react": "*",

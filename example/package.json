@@ -8,7 +8,8 @@
     "start": "react-native start",
     "pods": "cd ios && rm -rf Pods && rm -rf Podfile.lock && bundle exec pod install",
     "build:android": "cd android && ./gradlew assembleDebug --no-daemon --console=plain -PreactNativeArchitectures=arm64-v8a",
-    "build:ios": "cd ios && xcodebuild -workspace OPSQLiteExample.xcworkspace -scheme debug -configuration Debug -sdk iphonesimulator CC=clang CPLUSPLUS=clang++ LD=clang LDPLUSPLUS=clang++ GCC_OPTIMIZATION_LEVEL=0 GCC_PRECOMPILE_PREFIX_HEADER=YES ASSETCATALOG_COMPILER_OPTIMIZATION=time DEBUG_INFORMATION_FORMAT=dwarf COMPILER_INDEX_STORE_ENABLE=NO"
+    "build:ios": "cd ios && xcodebuild -workspace OPSQLiteExample.xcworkspace -scheme debug -configuration Debug -sdk iphonesimulator CC=clang CPLUSPLUS=clang++ LD=clang LDPLUSPLUS=clang++ GCC_OPTIMIZATION_LEVEL=0 GCC_PRECOMPILE_PREFIX_HEADER=YES ASSETCATALOG_COMPILER_OPTIMIZATION=time DEBUG_INFORMATION_FORMAT=dwarf COMPILER_INDEX_STORE_ENABLE=NO",
+    "windows": "react-native run-windows"
   },
   "dependencies": {
     "@craftzdog/react-native-buffer": "^6.0.5",
@@ -21,6 +22,7 @@
     "react": "18.2.0",
     "react-native": "0.74.2",
     "react-native-restart": "^0.0.27",
+    "react-native-windows": "0.74.9",
     "reflect-metadata": "^0.1.13",
     "stream-browserify": "^3.0.0",
     "util": "^0.12.5"
@@ -50,7 +52,8 @@
     "prettier": "2.8.8",
     "react-test-renderer": "18.2.0",
     "tailwindcss": "3.3.2",
-    "typescript": "5.0.4"
+    "typescript": "5.0.4",
+    "metro-config": "^0.80.9"
   },
   "engines": {
     "node": ">=18"
