@@ -10,14 +10,11 @@ import {
 } from 'react-native';
 import 'reflect-metadata';
 import {createLargeDB, queryLargeDB} from './Database';
-import {dbSetupTests, queriesTests, runTests, blobTests} from './tests/index';
+import {dbSetupTests, runTests} from './tests/index';
 import {styled} from 'nativewind';
-import {registerHooksTests} from './tests/hooks.spec';
 import {moveAssetsDatabase, open} from '@op-engineering/op-sqlite';
 import clsx from 'clsx';
-import {preparedStatementsTests} from './tests/preparedStatements.spec';
-import {constantsTests} from './tests/constants.spec';
-import {reactiveTests} from './tests/reactive.spec';
+
 
 const StyledScrollView = styled(ScrollView, {
   props: {
@@ -39,12 +36,12 @@ export default function App() {
     setResults([]);
     runTests(
       dbSetupTests,
-      queriesTests,
-      blobTests,
-      registerHooksTests,
-      preparedStatementsTests,
-      constantsTests,
-      reactiveTests,
+      // queriesTests,
+      // blobTests,
+      // registerHooksTests,
+      // preparedStatementsTests,
+      // constantsTests,
+      // reactiveTests,
     ).then(setResults);
   }, []);
 

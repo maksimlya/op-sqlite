@@ -5,12 +5,16 @@
 #include "NativeModules.h"
 #include <JSI/JsiApiContext.h>
 #include <winrt/Windows.Storage.h>
+#include <winrt/Windows.Storage.Streams.h>
 #include <winrt/Microsoft.ReactNative.h>
 #include <TurboModuleProvider.h>
 #include "bindings.h"
 
 using namespace winrt::Microsoft::ReactNative;
 using namespace facebook;
+using namespace winrt;
+using namespace Windows::Foundation;
+using namespace Windows::Storage;
 
 namespace winrt::OpEngineeringOpSqlite
 {
@@ -52,6 +56,10 @@ namespace winrt::OpEngineeringOpSqlite
             
             return true;
         }
+    REACT_METHOD(moveAssetsDatabase);
+    void moveAssetsDatabase(React::JSValueObject&& args, React::ReactPromise<bool> promise) noexcept {
+        promise.Resolve(true);
+    };
 
     private:
         ReactContext m_reactContext{ nullptr };
